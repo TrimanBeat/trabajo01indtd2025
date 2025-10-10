@@ -1,0 +1,16 @@
+---
+title: "Barrido del parámetro p"
+format: html
+ embed-resources: true
+    toc: true
+execute:
+  echo: true
+  warning: false
+  error: false
+---
+# Librerías y carga de funciones
+
+```{r}
+source("teoria_decision_funciones_incertidumbre.txt")
+library(ggplot2)
+```

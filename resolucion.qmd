@@ -1,0 +1,23 @@
+---
+title: "Resolución de problemas"
+format: html
+ embed-resources: true
+    toc: true
+execute:
+  echo: true
+  warning: false
+  error: false
+---
+
+
+```{r}
+# Librerías y carga de funciones
+source("teoria_decision_funciones_incertidumbre.R")
+library(ggplot2)
+
+```
+
+
+
+
+
