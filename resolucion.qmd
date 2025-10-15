@@ -1,7 +1,8 @@
 ---
 title: "Resolución de problemas"
-format: html
- embed-resources: true
+format: 
+  html:
+    embed-resources: true
     toc: true
 ---
 
@@ -10,11 +11,16 @@ format: html
 # Librerías y carga de funciones
 source("teoria_decision_funciones_incertidumbre.R")
 library(ggplot2)
-
+library(knitr)
+library(kableExtra)
 ```
+
+
 ## 1. Primer problema: Resolución de tabla de decisión con los métodos vistos en clase.
 
  Usaremos una tabla de decisión con los mismos datos que la tarea realizado en Excel para la clase de teoría, así podremos comparar si los resultados son iguales.
+
+ Al final de cada apartado pondremos una tabla resumen con todas las decisiones obtenidas.
  
 
 ```{r}
@@ -27,41 +33,113 @@ pb1_datos <- crea.tablaX(c( 80, 60,	90,	70,	85,	75,
                 70,	60,	65,	55,	60,	65),
     numalternativas = 5, numestados = 6
 )
+alfaH <- 0.4 # Establecemos un nivel de alfa para el criterio de Hurwicz
 ```
 
-
+```{r}
+kable(pb1_datos, caption = "Tabla de decisión")
+```
 ### 1.1 Resolución en el caso favorable (beneficios)
 
 ```{r}
 #| label: resolución en el caso favorable
 
-criterio.Wald(pb1_datos, favorable = TRUE)#favorable = TRUE se refiere a beneficios
-criterio.Optimista(pb1_datos, favorable = TRUE)
-criterio.Hurwicz(pb1_datos, alfa = 0.4, favorable =TRUE)
-criterio.Savage(pb1_datos, favorable = TRUE)#pesos son las pérdidas
-criterio.Laplace(pb1_datos, favorable = TRUE) 
-criterio.PuntoIdeal(pb1_datos, favorable = TRUE)
+waldfav <- criterio.Wald(pb1_datos, favorable = TRUE)#favorable = TRUE se refiere a beneficios
+optfav <- criterio.Optimista(pb1_datos, favorable = TRUE)
+hurfav <- criterio.Hurwicz(pb1_datos, alfa = alfaH, favorable =TRUE)
+savagefav <- criterio.Savage(pb1_datos, favorable = TRUE)#pesos son las pérdidas
+laplacefav <- criterio.Laplace(pb1_datos, favorable = TRUE) 
+idealfav <- criterio.PuntoIdeal(pb1_datos, favorable = TRUE)
+waldfav
+optfav
+hurfav
+savagefav
+laplacefav
+idealfav
+```
+
+```{r}
+#| label: representación Hurwicz caso favorable
+
 
 #Rectas del método Hurwicz
 dibuja.criterio.Hurwicz(pb1_datos, favorable = TRUE)
-dibuja.criterio.Hurwicz_Intervalos(pb1_datos, favorable = TRUE)
-
+#dibuja.criterio.Hurwicz_Intervalos(pb1_datos, favorable = TRUE) No hay puntos de corte porque d4 es la mejor para cualquier valor de alpha
 ```
 
+ A continuación se ofrece una tabla resumen de la elección para cada uno de los criterios, que nos ayudará para la decisión final.
+
+```{r}
+#| label: tabla de resultados en el caso favorable
+resumenfav <- data.frame(
+Criterio = c("Wald", "Optimista", "Hurwicz", "Savage","Laplace","Punto Ideal"),
+AlternativaOptima = c(
+  names(waldfav$AlternativaOptima),
+  names(optfav$AlternativaOptima),
+  names(hurfav$AlternativaOptima),
+  names(savagefav$AlternativaOptima),
+  names(laplacefav$AlternativaOptima),
+  names(idealfav$AlternativaOptima)
+)
+)
+
+library(kableExtra)
+kable(resumenfav, caption = paste("Decisión óptima según cada criterio (α =", alfaH, ")")) |>
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+
+ **Decisión**: En todos los criterios la mejor alternativa en el caso favorable es la **d4**. Esto resultados están acorde a lo calculado con Excel.
+
+
 ### 1.2 Resolución en el caso desfavorable (costos)
+
+ Calculamos la mejor decisión con cada criterio para el caso desfavorable
 
 ```{r}
 #| label: resolución en el caso desfavorable
 
-criterio.Wald(pb1_datos, favorable = FALSE)
-criterio.Optimista(pb1_datos, favorable = FALSE)
-criterio.Hurwicz(pb1_datos, alfa = 0.4, favorable =FALSE)
-criterio.Savage(pb1_datos, favorable = FALSE)
-criterio.Laplace(pb1_datos, favorable = FALSE) 
-criterio.PuntoIdeal(pb1_datos, favorable = FALSE)
+walddes <- criterio.Wald(pb1_datos, favorable = FALSE)
+optdes <- criterio.Optimista(pb1_datos, favorable = FALSE)
+hurdes <- criterio.Hurwicz(pb1_datos, alfa = alfaH, favorable =FALSE)
+savagedes <- criterio.Savage(pb1_datos, favorable = FALSE)
+laplacedes <- criterio.Laplace(pb1_datos, favorable = FALSE) 
+idealdes <- criterio.PuntoIdeal(pb1_datos, favorable = FALSE)
+
+walddes
+optdes
+hurdes
+savagedes
+laplacedes
+idealdes
 
 #Rectas del método Hurwicz
 dibuja.criterio.Hurwicz(pb1_datos, favorable = FALSE)
-dibuja.criterio.Hurwicz_Intervalos(pb1_datos, favorable = FALSE)
+#dibuja.criterio.Hurwicz_Intervalos(pb1_datos, favorable = FALSE) No hay puntos de corte porque d3 siempre es la mejor para cualquier valor de alpha
 ```
+ Para todo alfa en el caso desfavorable la mejor decisión es la d3.
 
+ Se muestra ahora un resumen de los resultados para el caso desfavorable.
+ 
+```{r}
+#| label: tabla de resultados en el caso desfavorable
+resumendes <- data.frame(
+Criterio = c("Wald", "Optimista", "Hurwicz", "Savage","Laplace","Punto Ideal"),
+AlternativaOptima = c(
+  paste(names(walddes$AlternativaOptima), collapse = ", "),
+  names(optdes$AlternativaOptima),
+  names(hurdes$AlternativaOptima),
+  names(savagedes$AlternativaOptima),
+  names(laplacedes$AlternativaOptima),
+  names(idealdes$AlternativaOptima)
+)
+)
+AlternativaOptima <- 
+library(kableExtra)
+kable(resumendes, caption = paste("Decisión óptima según cada criterio (α =", alfaH, ")")) |>
+kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
+```
+ En el caso desfavorable elección mayoritaria será d3 en todos los criterios, sólo d5 se elige 1 vez en el criterio de Wald.
+ 
+  **Decisión**: La mejor alternativa en el caso desfavorable es la **d3**. Esto resultados están acorde a lo calculado con Excel.
+ 
+ 
