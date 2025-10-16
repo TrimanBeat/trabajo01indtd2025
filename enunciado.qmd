@@ -1,0 +1,65 @@
+---
+title: "Enunciado"
+format: 
+  html:
+    embed-resources: true
+    toc: true
+---
+
+```{r}
+# Librerías y carga de funciones
+source("teoria_decision_funciones_incertidumbre.R")
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+```
+
+## 1. Primer problema: Resolución de tabla de decisión con los métodos vistos en clase.
+
+Usaremos una tabla de decisión con los mismos datos que la tarea realizado en Excel para la clase de teoría, así podremos comparar si los resultados son iguales.
+
+Al final de cada apartado pondremos una tabla resumen con todas las decisiones obtenidas.
+
+```{r}
+#| label: introducción de datos
+#| echo: false
+
+pb1_datos <- crea.tablaX(c( 80, 60,	90,	70,	85,	75,
+                95,	55,	65,	60,	70,	80,
+                50,	45,	55,	60,	65,	70,
+                90,	85, 95,	80,	75,	100,
+                70,	60,	65,	55,	60,	65),
+    numalternativas = 5, numestados = 6
+)
+alfaH <- 0.4 # Establecemos un nivel de alfa para el criterio de Hurwicz
+```
+
+```{r}
+kable(pb1_datos, caption = "Tabla de decisión")
+```
+
+## 2. Segundo problema: enunciar un problema real y resolverlo mediante métodos de incertidumbre.
+
+### Evaluación de pólizas de mantenimiento para vivienda.
+
+Queremos contratar una póliza de mantenimiento anual para nuestra vivienda antes de un año con obras previstas. Hay cinco opciones comerciales disponibles: Plan Ahorro, Plan Básico, Plan Plus, Plan Premium y Plan Platinum. Cada plan establece una cuota anual fija y cubre distintos porcentajes del coste de reparaciones. Durante el año pueden ocurrir cuatro estados de la naturaleza mutuamente excluyentes:
+
+-    **S1 Solo mantenimiento rutinario**: solo pequeñas reparaciones y revisiones por 300 €.
+
+-    **S2 Avería de fontanería**: costes adicionales de fontanería 1.800 € más el mantenimiento rutinario.
+
+-    **S3 Avería eléctrica y fontanería**: costes adicionales 3.000 € más el mantenimiento rutinario.
+
+-    **S4 Daño estructural importante:** costes adicionales 9.000 € más el mantenimiento rutinario.
+
+Las características de los planes son:
+
+-    Plan Ahorro: cuota anual 120 €, cubre 0% de reparaciones (solo asesoramiento).
+
+-    Plan Básico: cuota anual 300 €, cubre 50% de costes de reparaciones excepto daños estructurales (que cubre 0%).
+
+-    Plan Plus: cuota anual 480 €, cubre 70% de fontanería y electricidad, 20% de daños estructurales.
+
+-    Plan Premium: cuota anual 720 €, cubre 90% de fontanería y electricidad, 50% de daños estructurales.
+
+-    Plan Platinum: cuota anual 1.200 €, cobertura completa 100% de todos los costes.
