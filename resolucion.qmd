@@ -140,6 +140,6 @@ kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
  En el caso desfavorable elección mayoritaria será d3 en todos los criterios, sólo d5 se elige 1 vez en el criterio de Wald.
  
-  **Decisión**: La mejor alternativa en el caso desfavorable es la **d3**. Esto resultados están acorde a lo calculado con Excel.
+  **Decisión**: La mejor alternativa en el caso desfavorable es la **d3**. Estos resultados están acorde a lo calculado con Excel.
  
  
