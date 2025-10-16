@@ -236,4 +236,4 @@ dibuja.criterio.Hurwicz_Intervalos(pb2_datos, favorable=FALSE)
 
 ```
 
-**Conclusión**: **contratamos el plan Platinum** que ha sido el elegido en todos los métodos menos el criterio Optimista, en el que se ha optado por el plan Ahorro. Esto concuerda con el estudio que hemos realizado del criterio de Hurwicz, donde vemos que a partir de α = 0.91 elegiremos la alternativa Ahorro.
+**Conclusión**: **contratamos el plan Platinum** que ha sido el elegido en todos los métodos menos el criterio Optimista, en el que se ha optado por el plan Ahorro. Esto concuerda con el estudio que hemos realizado del criterio de Hurwicz, donde vemos que a partir de α = 0.91 elegiremos la alternativa Ahorro.
