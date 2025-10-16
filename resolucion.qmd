@@ -6,7 +6,6 @@ format:
     toc: true
 ---
 
-
 ```{r}
 # Librerías y carga de funciones
 source("teoria_decision_funciones_incertidumbre.R")
@@ -15,13 +14,11 @@ library(knitr)
 library(kableExtra)
 ```
 
-
 ## 1. Primer problema: Resolución de tabla de decisión con los métodos vistos en clase.
 
- Usaremos una tabla de decisión con los mismos datos que la tarea realizado en Excel para la clase de teoría, así podremos comparar si los resultados son iguales.
+Usaremos una tabla de decisión con los mismos datos que la tarea realizado en Excel para la clase de teoría, así podremos comparar si los resultados son iguales.
 
- Al final de cada apartado pondremos una tabla resumen con todas las decisiones obtenidas.
- 
+Al final de cada apartado pondremos una tabla resumen con todas las decisiones obtenidas.
 
 ```{r}
 #| label: introducción de datos
@@ -37,8 +34,10 @@ alfaH <- 0.4 # Establecemos un nivel de alfa para el criterio de Hurwicz
 ```
 
 ```{r}
+#| label: tabla de decisión
 kable(pb1_datos, caption = "Tabla de decisión")
 ```
+
 ### 1.1 Resolución en el caso favorable (beneficios)
 
 ```{r}
@@ -67,7 +66,7 @@ dibuja.criterio.Hurwicz(pb1_datos, favorable = TRUE)
 #dibuja.criterio.Hurwicz_Intervalos(pb1_datos, favorable = TRUE) No hay puntos de corte porque d4 es la mejor para cualquier valor de alpha
 ```
 
- A continuación se ofrece una tabla resumen de la elección para cada uno de los criterios, que nos ayudará para la decisión final.
+A continuación se ofrece una tabla resumen de la elección para cada uno de los criterios, que nos ayudará para la decisión final.
 
 ```{r}
 #| label: tabla de resultados en el caso favorable
@@ -88,12 +87,11 @@ kable(resumenfav, caption = paste("Decisión óptima según cada criterio (α ="
 kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
- **Decisión**: En todos los criterios la mejor alternativa en el caso favorable es la **d4**. Esto resultados están acorde a lo calculado con Excel.
-
+**Decisión**: En todos los criterios la mejor alternativa en el caso favorable es la **d4**. Esto resultados están acorde a lo calculado con Excel.
 
 ### 1.2 Resolución en el caso desfavorable (costos)
 
- Calculamos la mejor decisión con cada criterio para el caso desfavorable
+Calculamos la mejor decisión con cada criterio para el caso desfavorable
 
 ```{r}
 #| label: resolución en el caso desfavorable
@@ -116,10 +114,11 @@ idealdes
 dibuja.criterio.Hurwicz(pb1_datos, favorable = FALSE)
 #dibuja.criterio.Hurwicz_Intervalos(pb1_datos, favorable = FALSE) No hay puntos de corte porque d3 siempre es la mejor para cualquier valor de alpha
 ```
- Para todo alfa en el caso desfavorable la mejor decisión es la d3.
 
- Se muestra ahora un resumen de los resultados para el caso desfavorable.
- 
+Para todo alfa en el caso desfavorable la mejor decisión es la d3.
+
+Se muestra ahora un resumen de los resultados para el caso desfavorable.
+
 ```{r}
 #| label: tabla de resultados en el caso desfavorable
 resumendes <- data.frame(
@@ -138,8 +137,103 @@ library(kableExtra)
 kable(resumendes, caption = paste("Decisión óptima según cada criterio (α =", alfaH, ")")) |>
 kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
- En el caso desfavorable elección mayoritaria será d3 en todos los criterios, sólo d5 se elige 1 vez en el criterio de Wald.
- 
-  **Decisión**: La mejor alternativa en el caso desfavorable es la **d3**. Estos resultados están acorde a lo calculado con Excel.
- 
- 
+
+En el caso desfavorable elección mayoritaria será d3 en todos los criterios, sólo d5 se elige 1 vez en el criterio de Wald.
+
+**Conclusión**: La mejor alternativa en el caso desfavorable es la **d3**. Estos resultados están acorde a lo calculado con Excel.
+
+## 2. Segundo problema: enunciar un problema real y resolverlo mediante métodos de incertidumbre.
+
+### 2.1 Evaluación de pólizas de mantenimiento para vivienda.
+
+Queremos contratar una póliza de mantenimiento anual para nuestra vivienda antes de un año con obras previstas. Hay cinco opciones comerciales disponibles: Plan Ahorro, Plan Básico, Plan Plus, Plan Premium y Plan Platinum. Cada plan establece una cuota anual fija y cubre distintos porcentajes del coste de reparaciones. Durante el año pueden ocurrir cuatro estados de la naturaleza mutuamente excluyentes:
+
+-   **S1 Solo mantenimiento rutinario**: solo pequeñas reparaciones y revisiones por 300 €.
+
+-   **S2 Avería de fontanería**: costes adicionales de fontanería 1.800 € más el mantenimiento rutinario.
+
+-   **S3 Avería eléctrica y fontanería**: costes adicionales 3.000 € más el mantenimiento rutinario.
+
+-   **S4 Daño estructural importante:** costes adicionales 9.000 € más el mantenimiento rutinario.
+
+Las características de los planes son:
+
+-   Plan Ahorro: cuota anual 120 €, cubre 0% de reparaciones (solo asesoramiento).
+
+-   Plan Básico: cuota anual 300 €, cubre 50% de costes de reparaciones excepto daños estructurales (que cubre 0%).
+
+-   Plan Plus: cuota anual 480 €, cubre 70% de fontanería y electricidad, 20% de daños estructurales.
+
+-   Plan Premium: cuota anual 720 €, cubre 90% de fontanería y electricidad, 50% de daños estructurales.
+
+-   Plan Platinum: cuota anual 1.200 €, cobertura completa 100% de todos los costes.
+
+En principio usaremos índice de optimismo **α = 0.6.**
+
+### 2.2 Resolución del problema 2
+
+Estamos ante un problema de costes. Objetivo: minimizar el coste total del primer año ante incertidumbre sobre el estado futuro. Usaremos la función que calcula la elección para todos los métodos y veremos cuál decisión es la más acertada.
+
+```{r}
+#| label: introducción de datos pb2
+
+# Ahorro
+md11 <- 300 + 120
+md12 <- 300 + 120 + 1800
+md13 <- 300 + 120 + 3000
+md14 <- 300 + 120 + 9000
+
+# Básico (50% cobertura en S2 y S3, 0% en S4)
+md21 <- 300 + 300
+md22 <- 300 + 300 + 0.5 * 1800
+md23 <- 300 + 300 + 0.5 * 3000
+md24 <- 300 + 300 + 9000
+
+# Plus (70% cobertura en S2 y S3, 20% en S4)
+md31 <- 300 + 480
+md32 <- 300 + 480 + 0.3 * 1800
+md33 <- 300 + 480 + 0.3 * 3000
+md34 <- 300 + 480 + 0.8 * 9000
+
+# Premium (90% cobertura en S2 y S3, 50% en S4)
+md41 <- 300 + 720
+md42 <- 300 + 720 + 0.1 * 1800
+md43 <- 300 + 720 + 0.1 * 3000
+md44 <- 300 + 720 + 0.5 * 9000
+
+# Platinum (100% cobertura en todo)
+md51 <- 300 + 1200
+md52 <- 1200
+md53 <- 1200
+md54 <- 1200
+
+
+
+pb2_datos <- crea.tablaX(c( 
+                md11, md12, md13, md14,
+                md21,	md22, md23,	md24,
+                md31,	md32, md33, md34,
+                md41,	md42, md43,	md44,
+                md51, md52, md53, md54),
+    numalternativas = 5, numestados = 4,
+    nb_alternativas = c("Ahorro", "Básico","Plus", "Premium", "Platinum"),
+    nb_estados = c("S1", "S2", "S3", "S4")
+)
+alfaH2 <- 0.6 # Establecemos un nivel de alfa para el criterio de Hurwicz
+```
+
+```{r}
+#| label: tabla de decisión pb2
+kable(pb2_datos, caption = "Tabla de decisión")
+```
+
+```{r}
+
+sol02 <- criterio.Todos(pb2_datos, alfa=0.6, favorable = FALSE)
+sol02
+
+dibuja.criterio.Hurwicz_Intervalos(pb2_datos, favorable=FALSE)
+
+```
+
+**Conclusión**: **contratamos el plan Platinum** que ha sido el elegido en todos los métodos menos el criterio Optimista, en el que se ha optado por el plan Ahorro. Esto concuerda con el estudio que hemos realizado del criterio de Hurwicz, donde vemos que a partir de α = 0.91 elegiremos la alternativa Ahorro.
