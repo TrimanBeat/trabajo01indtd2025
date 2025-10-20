@@ -8,7 +8,7 @@ format:
 
 ```{r}
 # Librerías y carga de funciones
-source("teoria_decision_funciones_incertidumbre.R")
+source("https://raw.githubusercontent.com/calote/TDecisionCodigo/refs/heads/master/teoriadecision_funciones_incertidumbre.R")
 library(ggplot2)
 library(knitr)
 library(kableExtra)

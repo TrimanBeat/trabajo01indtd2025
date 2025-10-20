@@ -8,7 +8,7 @@ format:
 
 ```{r}
 # Librerías y carga de funciones
-source("teoria_decision_funciones_incertidumbre.R")
+source("https://raw.githubusercontent.com/calote/TDecisionCodigo/refs/heads/master/teoriadecision_funciones_incertidumbre.R")
 library(ggplot2)
 library(knitr)
 library(kableExtra)
@@ -87,7 +87,7 @@ kable(resumenfav, caption = paste("Decisión óptima según cada criterio (α ="
 kable_styling(bootstrap_options = c("striped", "hover", "condensed"))
 ```
 
-**Decisión**: En todos los criterios la mejor alternativa en el caso favorable es la **d4**. Esto resultados están acorde a lo calculado con Excel.
+**Conclusión**: En todos los criterios la mejor alternativa en el caso favorable es la **d4**. Esto resultados están acorde a lo calculado con Excel.
 
 ### 1.2 Resolución en el caso desfavorable (costos)
 
